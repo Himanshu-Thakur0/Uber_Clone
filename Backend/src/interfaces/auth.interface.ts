@@ -6,7 +6,7 @@ interface name {
 }
 
 export interface UserInput extends Document {
-    fullName:name,
+    fullName?:name,
     email:string,
     password:string
 }

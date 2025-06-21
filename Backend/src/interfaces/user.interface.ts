@@ -5,10 +5,11 @@ interface name {
     lastName:string
 }
 
-export interface IUser {
-    _id?:Types.ObjectId,
+export interface IUser extends Document {
+    _id:Types.ObjectId,
     fullName:name,
     email:string,
     password:string,
-    socketId?:string
+    socketId?:string,
+    comparePassword: (password: string) => Promise<boolean>;
 } 

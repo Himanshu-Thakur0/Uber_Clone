@@ -28,7 +28,6 @@ const userSchema = new Schema<IUser>(
             type:String,
             required:[true,"password is mandatory"],
             unique:true,
-            select:false
         },
         socketId:{
             type:String
@@ -45,7 +44,7 @@ userSchema.pre("save" ,async function (next:NextFunction) {
     next()
 })
 
-userSchema.methods.comparePassword = async function (password:string) {
+userSchema.methods.comparePassword = async function (password:string): Promise<boolean> {
     return await bcrypt.compare(password,this.password)
 }
 

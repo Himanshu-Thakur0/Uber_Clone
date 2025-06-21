@@ -53,5 +53,46 @@ export const SignUp = asyncHandler(
         }
     }
 );
-export const SignIn = asyncHandler(async (req, res) => {});
+
+
+export const SignIn = asyncHandler(async (req, res) => {
+    const { email, password }:UserInput = req.body;
+
+    const user = await userModel.findOne({email});
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+    if (!isPasswordValid) {
+        throw new ApiError(401, "Invalid password or email");
+    }
+
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    const loggedInUser = await userModel.findById(user._id).select("-password -__v");
+    if (!loggedInUser) {
+        throw new ApiError(401, "User not logged in");
+    }
+
+    res.status(200)
+        .cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: NODE_ENV === "development",
+            sameSite: "strict",
+        })
+        .cookie("accessToken", accessToken, {
+            httpOnly: true,
+            secure: NODE_ENV === "development",
+            sameSite: "strict",
+        })
+        .json(
+            new ApiResponse(200, [{token : accessToken}, loggedInUser], "User logged in successfully")
+        );
+
+    
+});
+
+
 export const SignOut = asyncHandler(async (req, res) => {});
