@@ -44,7 +44,7 @@ export const SignUp = asyncHandler(
                     sameSite: "strict",
                 })
                 .json(
-                    new ApiResponse(200, newUser, "User created successfully" , accessToken)
+                    new ApiResponse(200, [{token : accessToken},newUser], "User created successfully")
                 );
         } catch (error) {
             await session.abortTransaction();

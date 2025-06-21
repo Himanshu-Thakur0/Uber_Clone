@@ -3,11 +3,9 @@ class ApiResponse {
     data: any[];
     message:string;
     success:boolean;
-    token?: string;
 
-    constructor(statusCode:number , data:any[], message = "success" , token?:string) {
+    constructor(statusCode:number , data:any[], message = "success" ) {
         this.statusCode = statusCode
-        this.token = token
         this.data = data
         this.message = message
         this.success = statusCode < 400
