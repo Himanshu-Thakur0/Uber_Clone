@@ -23,7 +23,10 @@ app.use(cookieParser())
 
 // Import and use the user routes
 import userRouter from './routes/user.routes.ts';
-app.use('/api/v1/user', userRouter);
+app.use('/api/v1/users', userRouter);
+
+import authRouter from './routes/auth.routes.ts';
+app.use('/api/v1/auth', authRouter);
 
 
 

@@ -17,7 +17,7 @@ declare global {
 export const authenticate = asyncHandler(async (req:Request,res:Response,next:NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new ApiError(401, "Authentication token is missing or invalid");
+        throw new ApiError(401, "Unauthorized access");
     }
 
     const token = authHeader.split(" ")[1];
@@ -25,6 +25,6 @@ export const authenticate = asyncHandler(async (req:Request,res:Response,next:Ne
         const decoded = jwt.verify(token, ACCESS_SECRET as string) as { id: string };
         req.user = { id: decoded.id }; // Assuming you want to attach user info to the request
     } catch (error) {
-        throw new ApiError(401, "Authentication token is invalid");
+        throw new ApiError(401, "Unauthorized access");
     }
 })

@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { SignIn, SignUp } from "../controllers/auth.controller.ts";
+import { getUser, getUsers } from "../controllers/user.controller.ts";
+import { authenticate } from "../middlewares/auth.middleware.ts";
 
 
 const userRouter = Router();
 
-userRouter.post("/sign-up", SignUp)
-userRouter.get("/sign-in", SignIn)
+userRouter.get("/", authenticate, getUsers)
+userRouter.get("/:id", authenticate, getUser)
 
 export default userRouter;
