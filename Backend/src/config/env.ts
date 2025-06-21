@@ -14,6 +14,10 @@ export const {
     ACCESS_EXPIRATION,
     REFRESH_SECRET,
     REFRESH_EXPIRATION,
+
+    ARCJET_KEY,
+    ARCJET_ENV,
+    
 } = process.env;
 
 console.log(NODE_ENV);
