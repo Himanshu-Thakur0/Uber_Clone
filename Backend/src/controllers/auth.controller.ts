@@ -7,6 +7,8 @@ import { ApiResponse } from "../utils/ApiResponse.ts";
 import { Request, Response, NextFunction } from "express";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.ts";
 import { NODE_ENV } from "../config/env.ts";
+import redisClient from "../config/redis.ts";
+import jwt , { decode } from "jsonwebtoken";
 
 export const SignUp = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -95,4 +97,15 @@ export const SignIn = asyncHandler(async (req, res) => {
 });
 
 
-export const SignOut = asyncHandler(async (req, res) => {});
+export const SignOut = asyncHandler(async (req, res):Promise<any> => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(400).json({ message: 'Token missing' });
+
+    const decoded:any = decode(token);
+
+    const expiry = decoded.exp - Math.floor(Date.now() / 1000)
+
+    await redisClient.setEx(`bl_${token}`, expiry, 'blacklisted');
+
+    res.status(200).json({ message: 'Signed out successfully' });
+});

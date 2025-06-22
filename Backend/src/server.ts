@@ -2,6 +2,7 @@ import cors from "cors";
 import { app } from "./app.ts";
 import connectDB from "./config/db.ts";
 import { PORT } from "./config/env.ts";
+import redisClient from "./config/redis.ts";
 
 
 app.use(
@@ -12,12 +13,21 @@ app.use(
 );
 
 
-connectDB()
+(async () => {
+  await redisClient.connect();
+  console.log('Connected to Redis Cloud');
+
+  connectDB()
     .then(() => {
         app.listen(PORT, () => {
-            console.log(`Server is running on https://localhost:${PORT}`);
+            console.log(`Server is running on http://localhost:${PORT}`);
         });
     })
     .catch((err) => {
         console.log("Mongo DB Connection Error : ", err);
     });
+
+})();
+
+
+
