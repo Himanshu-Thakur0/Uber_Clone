@@ -18,8 +18,8 @@ export const SignUp = asyncHandler(
         try {
             const { fullName, email, password }: UserInput = req.body;
 
-            const existingUser = userModel.findOne({ email });
-            if (!existingUser) {
+            const existingUser = await userModel.findOne({ email });
+            if (existingUser) {
                 throw new ApiError(400, "User already exists with this email");
             }
 

@@ -2,7 +2,6 @@ import { NextFunction } from "express";
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt"
 import { IUser } from "../interfaces/user.interface.ts";
-import {z} from "zod";
 
 const userSchema = new Schema<IUser>(
     {
